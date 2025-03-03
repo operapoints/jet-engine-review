@@ -1,5 +1,7 @@
 # Jet design
 
+This is an overview of the uncertainties in the design of this engine. The engine is designed to produce 70N of thrust, and has a diameter of 80mm.
+
 ![Jet engine section](images/section_overview.png "Full Jet Section")
 
 ## Optimization
@@ -8,7 +10,11 @@ Optimization was completed using the genetic algorithm optimizer in MATLAB. The 
 
 ### Objective formulation
 
-The optimizer takes in a 6 dimensional array of design parameters and then outputs an objective value; in this case it was fuel consumption, which was minimized subject to certain constraints.
+The objective here was to minimize fuel consumption for a 70N engine. The choice of 70N was more or less arbitrary and was based on the performance of existing jet engines. The thrust went up to 140N subject to the constraints listed below but I decided against it since fuel consumption would have been too high.
+
+The optimizer takes in a 6 dimensional array ```x``` of design parameters and then outputs an objective value. In addition, several design parameters are output which define turbomachinery geometry.
+
+There are two functions, ```thrust(x)``` and ```jet_calc(x)```. ```thrust(x)``` is a function which only calculates thrust, while ```jet_calc(x)``` is similar to ```thrust(x)``` but also calculates a bunch of design parameters and constraints.
 
 The 6 parameters, represented with SI base units, and their optimization bounds were:
 - ```omega``` - shaft speed, $[4000,20000]$
@@ -18,7 +24,49 @@ The 6 parameters, represented with SI base units, and their optimization bounds 
 - ```R_T``` - turbine mean radius, $[0.1,0.3]$
 - ```u_i``` - inlet velocity, $[40,200]$
 
+The final optimum was:
+- ```omega``` - 10183.2 $rad/s$
+- ```R_0``` - 0.02027 $m$
+- ```R_c``` - 0.02399 $m$
+- ```A_T``` - 0.001548 $m^2$
+- ```R_T``` - 0.02793 $m$
+- ```u_i``` - 98.35 $m/s$
 
+Resulting in a fuel consumption of 2.8 grams per second, and a specific impulse / effective exhaust velocity of 24973 m/s.
+
+The final design did not lie along any of these optimization bounds, but I suspect they still were necessary to constrain it. Some of the assumptions I made which I'm not sure of are listed:
+
+- 75% efficiency in turbine and compressor, both are adiabatic
+- $\gamma$ constant as 1.4 even in combustor with $T_t = 1100K$
+- Air at standard sea level conditions is accelerated adiabatically to inlet velocity, compressor blades angled to have 0 incidence at this condition
+- Stagnation temperature ratio across compressor calculated with Euler equation assuming no inlet swirl and 0 blade backsweep
+- Negligible axial flow at compressor exit, relevant for calculating exit mach
+- Compressor exit height calculated to ensure constant meridional velocity, again assuming negligible axial component to velocity
+- Combustion occurs at stagnation pressure(this really only matters for calculating fuel consumption)
+- Fuel flow calculated as kerosene necessary to raise stagnation temp to 1100K - hot parts are made of 316 steel, which should be safe up to 1250K
+- Turbine and stator extract the same amount of work necessary for the compressor, factoring in inefficencies
+- ```A_T, R_T``` are used to calculate turbine and stator geometry, specifically entering and leaving angles and turbine blade length using the formulas in the script (these were what I showed you a few weeks ago)
+- Nozzle diameter chosen to let exit pressure be ambient, and thrust calculated assuming adiabatic nozzle and using the difference in inlet and exit velocities
+
+### Constraints
+These are constraints I thought were reasonable, but again I feel like I don't really know what I'm doing.
+
+Only four constraints were active in the final design, which are bolded
+
+- **Turbine width at least 9mm**
+- Turbine width at most equal to meanline radius
+- Compressor exit radius greater than inlet radius
+- **Compressor inlet angle at most 70 degrees**
+- Compressor mach calculated at exit at most 0.8 (calculated in stationary frame)
+- Stator exit mach at most 0.7
+- Stator leaving angle at most 70 degrees
+- Turbine inlet angle at most 65 degrees
+- **Turbine leaving angle at most 65 degrees**
+- Turbine outlet mach at most 0.8 degrees (calculated in meanline rotating frame)
+- **Thrust at least 70N**
+<details>
+<summary>Complete optimizer script, click to expand</summary>
+### .mlx script
 ```m
 global C_p u_0 T_t0 P_t0 rho_t0 R h_ker eta_c eta_T gam P_0
 %warning('off', 'MATLAB:fzero:InvalidFunctionValue'); % Suppress specific warning
@@ -289,3 +337,4 @@ jet_calc([10183.2,0.0202716,0.0239853,0.00154791,0.0279269,98.3504])
 %disp(jet_eval([14189,0.0235,0.0265,0.0017,0.0250,90]))
 
 ```
+</details>
