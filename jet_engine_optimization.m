@@ -74,28 +74,28 @@ try
     t_max = 1100;
     T_t4 = t_max;
     m_dotf = m_dot*C_p*(t_max-T_3)/h_ker;   
-    % P_t4 = P_t3;
-    % %These are commented out because the mach number at the stator exit is
-    % %gonna be higher anyway
-    % %min_turbine_area = choke_area(P_t4,T_t4,m_dot)
-    % %con_min_turbine_area = min_turbine_area - A_T
-    % 
-    % %Turbine
-    % %Adiabatically takes out power required for the compressor
-    % 
-    % P_req = (1/(eta_c*eta_T))*m_dot*omega^2*R_c^2;
-    % u_th = ((2*P_req)/m_dot)^0.5;
-    % 
-    % 
-    % %Nozzle
-    % %Takes what's left and accelerates it by adiabatic expansion to
-    % %atmospheric pressure
-    % 
-    % T_t6 = T_t4 - u_th^2/(2*C_p);
-    % P_t6 = P_t4*(T_t6/T_t4)^(gam/(gam-1));
-    % u_7 = (2*C_p*T_t6*(1-(P_0/P_t6)^((gam-1)/gam)))^0.5;
-    % 
-    % F = -m_dot*(u_7-u_0);
+    P_t4 = P_t3;
+    %These are commented out because the mach number at the stator exit is
+    %gonna be higher anyway
+    %min_turbine_area = choke_area(P_t4,T_t4,m_dot)
+    %con_min_turbine_area = min_turbine_area - A_T
+
+    %Turbine
+    %Adiabatically takes out power required for the compressor
+
+    P_req = (1/(eta_c*eta_T))*m_dot*omega^2*R_c^2;
+    u_th = ((2*P_req)/m_dot)^0.5;
+
+
+    %Nozzle
+    %Takes what's left and accelerates it by adiabatic expansion to
+    %atmospheric pressure
+
+    T_t6 = T_t4 - u_th^2/(2*C_p);
+    P_t6 = P_t4*(T_t6/T_t4)^(gam/(gam-1));
+    u_7 = (2*C_p*T_t6*(1-(P_0/P_t6)^((gam-1)/gam)))^0.5;
+
+    F = -m_dot*(u_7-u_0);
 
     
 catch
@@ -237,6 +237,9 @@ catch
     ceq = 1e6;
 end
 end
+
+%This code is set to calculate design parameters for the current optimum
+%The line which produces the actual design is the line which runs ga()
 
 %omega R_0 R_c A_T R_T u_i
 %f = thrust(x)
