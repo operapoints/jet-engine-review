@@ -6,15 +6,17 @@ This is an overview of the uncertainties in the design of this engine. The engin
 
 ## Optimization
 
-Optimization was completed using the genetic algorithm optimizer in MATLAB. The main uncertainty I have here is the exact formulation of the optimization problem. The complete .mlx script is shown at the end of this section and the .mlx file is in the root folder of this repo.
+The main question I have here is whether the assumptions made and the way the optimization is formulated make sense, since I don't have much experience with this.
+
+Optimization was completed using the genetic algorithm optimizer in MATLAB. The complete .mlx script is shown at the end of this section and the .mlx file is in the root folder of this repo.
 
 ### Objective formulation
 
-The objective here was to minimize fuel consumption for a 70N engine. The choice of 70N was more or less arbitrary and was based on the performance of existing jet engines. The thrust went up to 140N subject to the constraints listed below but I decided against it since fuel consumption would have been too high.
+The objective here was to minimize fuel consumption for a 70N engine. The choice of 70N was more or less arbitrary and was based on the performance of similar existing jet engines.
 
 The optimizer takes in a 6 dimensional array ```x``` of design parameters and then outputs an objective value. In addition, several design parameters are output which define turbomachinery geometry.
 
-There are two functions, ```thrust(x)``` and ```jet_calc(x)```. ```thrust(x)``` is a function which only calculates thrust, while ```jet_calc(x)``` is similar to ```thrust(x)``` but also calculates a bunch of design parameters and constraints.
+The main function is ```jet_calc(x)```, which calculates a bunch of design parameters and constraints. The other functions are just for the optimizer loop.
 
 The 6 parameters, represented with SI base units, and their optimization bounds were:
 - ```omega``` - shaft speed, $[4000,20000]$
@@ -30,11 +32,11 @@ The final optimum was:
 - ```R_c``` - 0.02399 $m$
 - ```A_T``` - 0.001548 $m^2$
 - ```R_T``` - 0.02793 $m$
-- ```u_i``` - 98.35 $m/s$
+- ```u_i``` - 127.5 $m/s$
 
-Resulting in a fuel consumption of 2.8 grams per second, and a specific impulse / effective exhaust velocity of 24973 m/s.
+Resulting in a fuel consumption of 3.6 grams per second, and a specific impulse / effective exhaust velocity of 19757 m/s.
 
-The final design did not lie along any of these optimization bounds, but I suspect they still were necessary to constrain it. Some of the assumptions I made which I'm not sure of are listed:
+The final design did not lie along any of these optimization bounds, but I suspect they still were necessary to constrain it. The assumptions I made which I'm not sure of are listed:
 
 - 75% efficiency in turbine and compressor, both are adiabatic
 - $\gamma$ constant as 1.4 even in combustor with $T_t = 1100K$
@@ -42,31 +44,33 @@ The final design did not lie along any of these optimization bounds, but I suspe
 - Stagnation temperature ratio across compressor calculated with Euler equation assuming no inlet swirl and 0 blade backsweep
 - Negligible axial flow at compressor exit, relevant for calculating exit mach
 - Compressor exit height calculated to ensure constant meridional velocity, again assuming negligible axial component to velocity
-- Combustion occurs at stagnation pressure(this really only matters for calculating fuel consumption)
+- Combustion occurs at stagnation pressure
 - Fuel flow calculated as kerosene necessary to raise stagnation temp to 1100K - hot parts are made of 316 steel, which should be safe up to 1250K
-- Turbine and stator extract the same amount of work necessary for the compressor, factoring in inefficencies
+- Turbine and stator reduce flow enthalpy flux by the same amount of power necessary for the compressor, factoring in inefficencies
 - ```A_T, R_T``` are used to calculate turbine and stator geometry, specifically entering and leaving angles and turbine blade length using the formulas in the script (these were what I showed you a few weeks ago)
 - Nozzle diameter chosen to let exit pressure be ambient, and thrust calculated assuming adiabatic nozzle and using the difference in inlet and exit velocities
 
 ### Constraints
 These are constraints I thought were reasonable, but again I feel like I don't really know what I'm doing.
 
-Only four constraints were active in the final design, which are bolded
+Only three constraints were active in the final design, which are bolded
 
 - **Turbine width at least 9mm**
 - Turbine width at most equal to meanline radius
 - Compressor exit radius greater than inlet radius
-- **Compressor inlet angle at most 70 degrees**
-- Compressor mach calculated at exit at most 0.8 (calculated in stationary frame)
+- Compressor inlet angle at most 70 degrees
+- **Compressor mach calculated at exit at most 0.8 (calculated in** stationary frame)
 - Stator exit mach at most 0.7
 - Stator leaving angle at most 70 degrees
 - Turbine inlet angle at most 65 degrees
-- **Turbine leaving angle at most 65 degrees**
+- Turbine leaving angle at most 65 degrees
 - Turbine outlet mach at most 0.8 degrees (calculated in meanline rotating frame)
 - **Thrust at least 70N**
+
+### Complete optimizer script
 <details>
-<summary>Complete optimizer script, click to expand</summary>
-### .mlx script
+<summary>click to expand</summary>
+
 ```m
 global C_p u_0 T_t0 P_t0 rho_t0 R h_ker eta_c eta_T gam P_0
 %warning('off', 'MATLAB:fzero:InvalidFunctionValue'); % Suppress specific warning
@@ -338,3 +342,45 @@ jet_calc([10183.2,0.0202716,0.0239853,0.00154791,0.0279269,98.3504])
 
 ```
 </details>
+
+## Turbomachinery design
+
+The turbomachinery here was designed according to the optimizer outputs, which prescribe radii and inlet/leaving angles only.
+
+The turbine and compressor are going to be 3d printed out of metal. The printing shop recommends a minimum wall thickness of 1mm and prints surfaces accurate to 0.1mm.
+
+### Compressor
+
+![](images/compressor.png "Compressor")
+
+The compressor will be TiAl6V4. Some concerns:
+
+- I avoided backsweep so I could get the highest pressure rise for a given diameter, but most designs I see have about 10-20 degrees of backsweep, and also some blade rake. Is this fine? I should not that I'm not concerned about off-design conditions
+- Will setting the blade inlet angles to have 0 incidence at the design point be sufficient to ensure appropriate inlet velocity?
+- The inlet radius compared to the compressor radius is proportionally quite large - is this okay?
+- The compressor has 0.3mm of clearance from the duct and a compression ratio of approximately 2 - is this good enough to prevent losses?
+
+### Turbine
+
+![](images/turbine.png "Turbine")
+
+The turbine will be printed from Inconel 719. 
+
+- Will setting the inlet angle to be such that the blade has 0 incidence at design RPM be enough to ensure that the design RPM is reached?
+- How much clearance should the blade tips have with the wall? The best clearance without machining is 0.3mm - will this be sufficient or will I need to machine a more precise fit?
+
+### Stator-turbine mean line section
+
+![](images/meanline_section.png "Meanline section")
+
+## Bearings
+
+I don't know a lot about bearings so I've included them here. The main concerns are the materials, and the lubrication/cooling system. I can't really find any information on what material to use, but I chose some ceramic bearings which can be seen at the link below - are they usable here?
+
+https://www.ebay.com/itm/354996682357
+
+I also have a cooling system - air from behind the compressor flows into the shaft tunnel through three tangential holes in the shaft tunnel, and a lubricant line is fed through the fourth remaining hole.
+
+
+![](images/bearing_lubrication.png "Meanline section")
+![](images/bearing_oil_ports.png "Meanline section")
