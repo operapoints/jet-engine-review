@@ -2,6 +2,10 @@
 
 This is an overview of the uncertainties in the design of this engine. The engine is designed to produce 70N of thrust, and has a diameter of 80mm.
 
+The engine uses a single gentrifugal impeller and a single stage axial turbine. The combustion chamber has fuel injected through 8 radial ports, where it will evaporate in normal evap tube type injectors and mix with air.
+
+Light grey parts are 6061 Al, and brown parts are 316 steel. The compressor is TiAl6V4 and the turbine is Inconel 719. 
+
 ![Jet engine section](images/section_overview.png "Full Jet Section")
 
 ## Optimization
@@ -36,7 +40,7 @@ The final optimum was:
 
 Resulting in a fuel consumption of 3.6 grams per second, and a specific impulse / effective exhaust velocity of 19757 m/s.
 
-The final design did not lie along any of these optimization bounds, but I suspect they still were necessary to constrain it. The assumptions I made which I'm not sure of are listed:
+The final design did not lie along any of these optimization bounds, however. The assumptions I made which I'm not sure of are listed:
 
 - 75% efficiency in turbine and compressor, both are adiabatic
 - $\gamma$ constant as 1.4 even in combustor with $T_t = 1100K$
@@ -51,7 +55,7 @@ The final design did not lie along any of these optimization bounds, but I suspe
 - Nozzle diameter chosen to let exit pressure be ambient, and thrust calculated assuming adiabatic nozzle and using the difference in inlet and exit velocities
 
 ### Constraints
-These are constraints I thought were reasonable, but again I feel like I don't really know what I'm doing.
+These are constraints I thought were reasonable, but again I am not certain of these.
 
 Only three constraints were active in the final design, which are bolded
 
@@ -355,7 +359,7 @@ The turbine and compressor are going to be 3d printed out of metal. The printing
 
 The compressor will be TiAl6V4. Some concerns:
 
-- I avoided backsweep so I could get the highest pressure rise for a given diameter, but most designs I see have about 10-20 degrees of backsweep, and also some blade rake. Is this fine? I should not that I'm not concerned about off-design conditions
+- I avoided backsweep so I could get the highest pressure rise for a given diameter, but most designs I see have about 10-20 degrees of backsweep, and also some blade rake. Is this fine? I should add that I'm not concerned about off-design conditions
 - Will setting the blade inlet angles to have 0 incidence at the design point be sufficient to ensure appropriate inlet velocity?
 - The inlet radius compared to the compressor radius is proportionally quite large - is this okay?
 - The compressor has 0.3mm of clearance from the duct and a compression ratio of approximately 2 - is this good enough to prevent losses?
@@ -367,7 +371,7 @@ The compressor will be TiAl6V4. Some concerns:
 The turbine will be printed from Inconel 719. 
 
 - Will setting the inlet angle to be such that the blade has 0 incidence at design RPM be enough to ensure that the design RPM is reached?
-- How much clearance should the blade tips have with the wall? The best clearance without machining is 0.3mm - will this be sufficient or will I need to machine a more precise fit?
+- How much clearance should the blade tips have with the wall? The best clearance without machining is 0.3mm - will this be sufficient or will I need to machine a more precise fit? There is a pressure drop of 7.5kPa across the turbine.
 
 ### Stator-turbine mean line section
 
@@ -379,7 +383,7 @@ I don't know a lot about bearings so I've included them here. The main concerns 
 
 https://www.ebay.com/itm/354996682357
 
-I also have a cooling system - air from behind the compressor flows into the shaft tunnel through three tangential holes in the shaft tunnel, and a lubricant line is fed through the fourth remaining hole.
+I also have a cooling system - air from behind the compressor flows into the shaft tunnel through three tangential holes in the shaft tunnel, and a lubricant line is fed through the fourth remaining hole. The idea is that air and lubricant will flow through the shaft tunnel and through the bearings, since the other end of the shaft tunnel opens into the stator exit which is at a lower pressure (there are equalization holes to allow the pressure in the small space behind the compressor to be equal to the compressor stagnation pressure). Do you think this will work?
 
 
 ![](images/bearing_lubrication.png "Meanline section")
