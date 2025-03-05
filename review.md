@@ -222,7 +222,14 @@ end
 ```
 </details>
 
-For convenience, here are all the intermediate results of the jet calculation.
+For convenience, here are all the intermediate results of the jet calculation. The numerical subscripts are:
+
+- 3: Compressor exit
+- 4: Combustor exit
+- 6: Turbine exit
+- 7: Nozzle exit
+
+I don't remember why I skipped around with these but I guess it made sense at the time
 <details>
 <summary>Intermediate results</summary>
 
