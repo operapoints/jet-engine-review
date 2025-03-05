@@ -60,7 +60,7 @@ The optimizer checked 11 constraints. These are constraints I thought were reaso
 
 Only three constraints were active in the final design, which are bolded
 
-- **Turbine width at least 9mm**
+- **Turbine blade length at least 9mm**
 - Turbine width at most equal to meanline radius
 - Compressor exit radius greater than inlet radius
 - Compressor inlet angle at most 70 degrees
