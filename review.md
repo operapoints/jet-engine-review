@@ -147,21 +147,21 @@ try
     u_a = compute_u_a(m_dot, rho_t4, T_t4, u_th, C_p, gam, A_T);
     u_stator = (u_th^2+u_a^2)^0.5;
     T_stator_exit = T_t4 - u_stator^2/(2*C_p);
-    P_stator_exit = P_t4*(T_stator_exit/T_t4)^(gam/(gam-1))
+    P_stator_exit = P_t4*(T_stator_exit/T_t4)^(gam/(gam-1));
     M_stator_exit = ((2/(gam-1))*((2*C_p*T_t4)/(2*C_p*T_t4-u_stator^2)-1))^0.5;
     con_stator_mach = M_stator_exit-0.7;
     beta_s = atan(u_th/u_a);
-    beta_s_deg = beta_s*(180/pi)
+    beta_s_deg = beta_s*(180/pi);
     con_beta_s_deg = abs(beta_s_deg)-70;
     beta_Ti = atan((u_th-omega*R_T)/u_a);
-    beta_Ti_deg = beta_Ti*(180/pi)
+    beta_Ti_deg = beta_Ti*(180/pi);
     con_beta_Ti_deg = abs(beta_Ti_deg)-65;
     T_t_to = T_t4 - P_req/(m_dot*C_p);
     P_t_to = P_t4*(T_t_to/T_t4)^(gam/(1-gam));
     rho_t_to = P_t_to/(R*T_t_to);
     u_a_to = compute_u_a(m_dot,rho_t_to,T_t_to,0,C_p,gam,A_T);
     beta_to = atan(R_T*omega/u_a_to);
-    beta_to_deg = beta_to*(180/pi)
+    beta_to_deg = beta_to*(180/pi);
     con_beta_to_deg = abs(beta_to_deg)-65;
     M_to = ((u_a_to^2+omega^2*R_T^2)/(gam*R*(T_t_to-(u_a_to/(2*C_p)))))^0.5;
     con_M_to = M_to-0.8;
@@ -170,10 +170,10 @@ try
     R_Tm = 0.023516;
     R_Td = 0.032338;
 
-    beta_Tim = atan((u_th-omega*R_Tm)/u_a)*(180/pi)
-    beta_Tom = atan(R_Tm*omega/u_a_to)*(180/pi)
-    beta_Tid = atan((u_th-omega*R_Td)/u_a)*(180/pi)
-    beta_Tod = atan(R_Td*omega/u_a_to)*(180/pi)
+    beta_Tim = atan((u_th-omega*R_Tm)/u_a)*(180/pi);
+    beta_Tom = atan(R_Tm*omega/u_a_to)*(180/pi);
+    beta_Tid = atan((u_th-omega*R_Td)/u_a)*(180/pi);
+    beta_Tod = atan(R_Td*omega/u_a_to)*(180/pi);
     %Nozzle
     %Takes what's left and accelerates it by adiabatic expansion to
     %atmospheric pressure
@@ -181,15 +181,15 @@ try
     T_t6 = T_t_to;
     T_6 = T_t6 - u_a_to^2/(2*C_p);
     P_t6 = P_t4*(T_t6/T_t4)^(gam/(gam-1));
-    P_6 = P_t6*(T_6/T_t6)^(gam/(gam-1))
+    P_6 = P_t6*(T_6/T_t6)^(gam/(gam-1));
     u_7 = (2*C_p*T_t6*(1-(P_0/P_t6)^((gam-1)/gam)))^0.5;
     M_7 = ((2/(gam-1))*((P_t6/P_0)^((gam-1)/gam)-1))^0.5;
     T_7 = (P_t6/P_0)^((gam-1)/gam)*T_t6;
     P_7= P_0;
     A_7 = (m_dot*R*T_7)/(P_7*u_7)
-    F = m_dot*(u_7-u_0)
+    F = m_dot*(u_7-u_0);
     con_min_thrust = 70 - F;
-    tsfc = F/m_dotf
+    tsfc = F/m_dotf;
     
     %Constraint arrays generated for the optimizer
     c = [];
@@ -204,7 +204,7 @@ try
         con_turbine_width;
         con_turbine_width_2;
         con_min_thrust;
-        con_M_to]
+        con_M_to];
     % Error catching for optimizer loop
     has_invalid = any(isnan(intm) | isinf(intm));
     if has_invalid
@@ -261,8 +261,23 @@ I don't know a lot about bearings so I've included them here. There are two bear
 
 https://www.ebay.com/itm/354996682357
 
-I also have a cooling system - air from behind the compressor flows into the shaft tunnel through three tangential holes in the shaft tunnel, and a lubricant line is fed through the fourth remaining hole. The idea is that air and lubricant will flow through the shaft tunnel and through the bearings, since the other end of the shaft tunnel opens into the stator exit which is at a lower pressure (there are equalization holes to allow the pressure in the small space behind the compressor to be equal to the compressor stagnation pressure). Do you think this will work?
+I also have a cooling system - air from behind the compressor flows into the shaft tunnel through three tangential holes in the shaft tunnel, and a lubricant line is fed through the fourth remaining hole. The idea is that air and lubricant will flow through the shaft tunnel and through the bearings, since the other end of the shaft tunnel opens into the stator exit which is at a lower pressure (there are equalization holes to allow the pressure in the small space behind the compressor to be equal to the compressor stagnation pressure). The main uncertainty I have here is whether this will work. 
+
+I've also noticed that most rc jets mix lubricant into the fuel and then use the same mixture both for the bearings and for combustion - is there any benefit to this besides simplifying plumbing? I'm planning on running a separate pure lubricant line directly to the bearings.
 
 
 ![](images/bearing_lubrication.png "Meanline section")
 ![](images/bearing_oil_ports.png "Meanline section")
+
+## Combustion chamber
+
+The combustion chamber will be made using 0.5mm thick 316 steel sheet. I'm mostly concerned about the air hole pattern and the evap tube design.
+
+The idea with the air hole pattern was to deliver air directly to each of the 8 evap tube fuel injectors, and to dilute the air with progressively larger diameter holes to ensure that the combustor walls are not exposed to a very high temperature. There is also a ring of 3mm dilution holes around the bottom, with the intention being to protect the stagnation points on the evap tube holders and stators. The hole pattern is mostly done by eye based on existing designs which is why I'm concerned.
+
+The evap tubes are also a little strange - due to the limited area in the combustor, they enter radially and then turn 90 degrees in the axial direction. I'm just worried if there will be any problems with this (stagnation very close to the combustor flame, flow to stators disrupted) since I haven't seen this done which makes me think there might be a reason not to.
+
+I am also worried that the flame might "backfire" and fuel and air might combust in the evap tube, and expose it to nearly-stoichiometric kerosene combustion, melting them. This apparently isn't generally an issue with jets but I don't know what mechanism prevents combustion in the evap tubes in such engines and I'm not sure if it will be avoided in this design.
+
+![](images/combustor.png "Combustor")
+![](images/evap_tube.png "Combustor")
