@@ -222,7 +222,7 @@ end
 ```
 </details>
 
-For convenience, her are all the intermediate results of the jet calculation.
+For convenience, here are all the intermediate results of the jet calculation.
 <details>
 <summary>Intermediate results</summary>
 
