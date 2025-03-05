@@ -105,7 +105,7 @@ try
     m_dot = P_t0/(R*T_t0)*(T_t0/(T_t0-(u_i^2/(2*C_p))))^(1/(1-gam))*u_i*pi*R_0^2;
     beta_ci_deg = atan((omega*R_0)/u_i)*(180/pi);
     con_beta_ci_deg = beta_ci_deg - 70;
-    M_i = ((R_0^2*omega^2 + u_i^2)/(gam*R*(T_t0-((u_i^2)/(2*C_p)))))^0.5;
+    M_i = ((u_i^2)/(gam*R*(T_t0-((u_i^2+(omega*R_c)^2)/(2*C_p)))))^0.5;
     con_impeller_tip_mach = M_i-0.8;
     
 
@@ -147,51 +147,50 @@ try
     u_a = compute_u_a(m_dot, rho_t4, T_t4, u_th, C_p, gam, A_T);
     u_stator = (u_th^2+u_a^2)^0.5;
     T_stator_exit = T_t4 - u_stator^2/(2*C_p);
-    P_stator_exit = P_t4*(T_stator_exit/T_t4)^(gam/(gam-1));
+    P_stator_exit = P_t4*(T_stator_exit/T_t4)^(gam/(gam-1))
     M_stator_exit = ((2/(gam-1))*((2*C_p*T_t4)/(2*C_p*T_t4-u_stator^2)-1))^0.5;
     con_stator_mach = M_stator_exit-0.7;
     beta_s = atan(u_th/u_a);
-    beta_s_deg = beta_s*(180/pi);
+    beta_s_deg = beta_s*(180/pi)
     con_beta_s_deg = abs(beta_s_deg)-70;
     beta_Ti = atan((u_th-omega*R_T)/u_a);
-    beta_Ti_deg = beta_Ti*(180/pi);
+    beta_Ti_deg = beta_Ti*(180/pi)
     con_beta_Ti_deg = abs(beta_Ti_deg)-65;
     T_t_to = T_t4 - P_req/(m_dot*C_p);
     P_t_to = P_t4*(T_t_to/T_t4)^(gam/(1-gam));
     rho_t_to = P_t_to/(R*T_t_to);
     u_a_to = compute_u_a(m_dot,rho_t_to,T_t_to,0,C_p,gam,A_T);
     beta_to = atan(R_T*omega/u_a_to);
-    beta_to_deg = beta_to*(180/pi);
+    beta_to_deg = beta_to*(180/pi)
     con_beta_to_deg = abs(beta_to_deg)-65;
     M_to = ((u_a_to^2+omega^2*R_T^2)/(gam*R*(T_t_to-(u_a_to/(2*C_p)))))^0.5;
     con_M_to = M_to-0.8;
     
-    % This calculates the stator and turbine inlet/leaving angles for the current design only
-    R_Tm = 0.023516;
-    R_Td = 0.032338;
+    
+    R_Tm = R_T - (A_T/(4*pi*R_T))
+    R_Td = R_T + (A_T/(4*pi*R_T))
 
-    beta_Tim = atan((u_th-omega*R_Tm)/u_a)*(180/pi);
-    beta_Tom = atan(R_Tm*omega/u_a_to)*(180/pi);
-    beta_Tid = atan((u_th-omega*R_Td)/u_a)*(180/pi);
-    beta_Tod = atan(R_Td*omega/u_a_to)*(180/pi);
+    beta_Tim = atan((u_th-omega*R_Tm)/u_a)*(180/pi)
+    beta_Tom = atan(R_Tm*omega/u_a_to)*(180/pi)
+    beta_Tid = atan((u_th-omega*R_Td)/u_a)*(180/pi)
+    beta_Tod = atan(R_Td*omega/u_a_to)*(180/pi)
     %Nozzle
     %Takes what's left and accelerates it by adiabatic expansion to
     %atmospheric pressure
     
     T_t6 = T_t_to;
-    T_6 = T_t6 - u_a_to^2/(2*C_p);
+    T_6 = T_t6 - u_a_to^2/(2*C_p)
     P_t6 = P_t4*(T_t6/T_t4)^(gam/(gam-1));
-    P_6 = P_t6*(T_6/T_t6)^(gam/(gam-1));
+    P_6 = P_t6*(T_6/T_t6)^(gam/(gam-1))
     u_7 = (2*C_p*T_t6*(1-(P_0/P_t6)^((gam-1)/gam)))^0.5;
     M_7 = ((2/(gam-1))*((P_t6/P_0)^((gam-1)/gam)-1))^0.5;
-    T_7 = (P_t6/P_0)^((gam-1)/gam)*T_t6;
+    T_7 = (P_0/P_t6)^((gam-1)/gam)*T_t6
     P_7= P_0;
     A_7 = (m_dot*R*T_7)/(P_7*u_7)
-    F = m_dot*(u_7-u_0);
+    F = m_dot*(u_7-u_0)
     con_min_thrust = 70 - F;
-    tsfc = F/m_dotf;
+    tsfc = F/m_dotf
     
-    %Constraint arrays generated for the optimizer
     c = [];
     intm = [con_impeller_tip_mach;
         con_stator_mach;
@@ -204,8 +203,8 @@ try
         con_turbine_width;
         con_turbine_width_2;
         con_min_thrust;
-        con_M_to];
-    % Error catching for optimizer loop
+        con_M_to]
+
     has_invalid = any(isnan(intm) | isinf(intm));
     if has_invalid
         
@@ -221,6 +220,15 @@ catch
 end
 end
 ```
+</details>
+
+For convenience, hera are all the intermediate results of the jet calculation.
+<details>
+<summary>Intermediate results</summary>
+
+![](images/vars1.png "intm1")
+![](images/vars2.png "intm2")
+![](images/vars3.png "intm3")
 </details>
 
 ## Turbomachinery design
