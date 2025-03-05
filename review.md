@@ -222,7 +222,7 @@ end
 ```
 </details>
 
-For convenience, hera are all the intermediate results of the jet calculation.
+For convenience, her are all the intermediate results of the jet calculation.
 <details>
 <summary>Intermediate results</summary>
 
