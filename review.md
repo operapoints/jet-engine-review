@@ -4,7 +4,7 @@ This is an overview of the uncertainties in the design of this engine. The engin
 
 The engine uses a single centrifugal impeller and a single stage axial turbine. The combustion chamber has fuel injected through 8 radial ports, where it will evaporate in normal evap tube type injectors and mix with air.
 
-Light grey parts are 6061 Al, and brown parts are 316 steel. The compressor is TiAl6V4 and the turbine is Inconel 719. 
+Light grey parts are 6061 Al, and brown parts are 316 steel. The compressor is TiAl6V4 and the turbine is Inconel 719. The fuel manifold is thin-walled copper tube.
 
 ![Jet engine section](images/section_overview.png "Full Jet Section")
 
