@@ -261,7 +261,7 @@ The compressor will be TiAl6V4. Some concerns:
 
 ![](images/turbine.png "Turbine")
 
-The turbine will be printed from Inconel 719. 
+The turbine will be printed from Inconel 719. More concerns:
 
 - Will setting the inlet angle to be such that the blade has 0 incidence at design RPM be enough to ensure that the design RPM is reached?
 - How much clearance should the blade tips have with the wall? The best clearance without machining is 0.3mm - will this be sufficient or will I need to machine a more precise fit? There is a pressure drop of 7.5kPa across the turbine.
@@ -286,7 +286,7 @@ I've also noticed that most rc jets mix lubricant into the fuel and then use the
 
 ## Combustion chamber
 
-The combustion chamber will be made using 0.5mm thick 316 steel sheet. It is a standard evap tube design - fuel will be injected into the base of the tubes through 1mm copper tubing, hit the wall of the evap tube, vaporize, and flow into the combustion chamber. I'm mostly concerned about the air hole pattern and the evap tube design.
+The combustion chamber will be made using 0.5mm thick 316 steel sheet. It is a standard evap tube design - fuel will be injected into the base of the tubes through 1mm copper tubing, hit the wall of the evap tube, vaporize, and flow into the combustion chamber. The engine will be primed with propane gas, fed in through the fuel manifold and ignited with an me8 spark plug inserted radially through the wall of the engine and the combustion chamber. Once the gas heats the tubes sufficiently, the fuel manifold will be switched over to kerosene via a 3 way valve to ramp up to full throttle. I'm mostly concerned about the air hole pattern and the evap tube design.
 
 The idea with the air hole pattern was to deliver air directly to each of the 8 evap tube fuel injectors, and to dilute the air with progressively larger diameter holes to ensure that the combustor walls are not exposed to a very high temperature. There is also a ring of 3mm dilution holes around the bottom, with the intention being to protect the stagnation points on the evap tube holders and stators. The hole pattern is mostly done by eye based on existing designs which is why I'm concerned.
 
