@@ -40,7 +40,7 @@ The final optimum was:
 
 Resulting in a fuel consumption of 3.6 grams per second, and a specific impulse / effective exhaust velocity of 19757 m/s.
 
-The assumptions I made which I'm not sure of are listed:
+The main assumptions I made which I'm not sure of are listed:
 
 - 75% efficiency in turbine and compressor, both are adiabatic
 - $\gamma$ constant as 1.4 even in combustor with $T_t = 1100K$
@@ -52,7 +52,6 @@ The assumptions I made which I'm not sure of are listed:
 - Combustion occurs at stagnation pressure
 - Combustor exit stagnation temp is 1100K (fuel flow is calculated to meet this) - hot parts are made of 316 steel, which should be safe up to 1250K
 - Turbine and stator geometry, specifically entering and leaving angles and turbine blade length, are calculated using ```A_T, R_T``` and the condition that power extracted is equal to compressor work factoring in inefficiencies using the formulas in the script (these were what I showed you a few weeks ago).
-- Turbine and stator reduce flow enthalpy flux by the same amount of power necessary for the compressor
 - Nozzle diameter chosen to let exit pressure be ambient, and thrust calculated assuming adiabatic nozzle and using the difference in inlet and exit velocities
 
 ### Constraints
