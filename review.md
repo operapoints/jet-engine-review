@@ -64,7 +64,7 @@ Only three constraints were active in the final design, which are bolded
 - Turbine width at most equal to meanline radius
 - Compressor exit radius greater than inlet radius
 - Compressor inlet angle at most 70 degrees
-- **Compressor mach calculated at exit at most 0.8 (calculated in** stationary frame)
+- **Compressor mach calculated at exit at most 0.8** (calculated in stationary frame)
 - Stator exit mach at most 0.7
 - Stator leaving angle at most 70 degrees
 - Turbine inlet angle at most 65 degrees
@@ -276,7 +276,7 @@ I don't know a lot about bearings so I've included them here. There are two bear
 
 https://www.ebay.com/itm/354996682357
 
-I also have a cooling system - air from behind the compressor flows into the shaft tunnel through three tangential holes in the shaft tunnel, and a lubricant line is fed through the fourth remaining hole. The idea is that air and lubricant will flow through the shaft tunnel and through the bearings, since the other end of the shaft tunnel opens into the stator exit which is at a lower pressure (there are equalization holes to allow the pressure in the small space behind the compressor to be equal to the compressor stagnation pressure). The main uncertainty I have here is whether this will work. 
+I also have a cooling system - air from behind the compressor flows into the shaft tunnel through three tangential holes in the shaft tunnel, and a lubricant line is fed through the fourth remaining hole. The idea is that air and lubricant will flow through the shaft tunnel and through the bearings, since the other end of the shaft tunnel opens into the stator exit which is at a lower pressure. There are equalization holes to allow the pressure in the small space behind the compressor to be equal to the compressor stagnation pressure, and the compressor outer rim will be machined to within 0.1mm of the diffuser housing to prevent excessive leakage. The main uncertainty I have here is whether this will work. I am particularly worried that air will leak from the space behind the compressor and leak into the compressor exit, impacting mass flow or reversing the airflow through the shaft tunnel. Currently the tight clearance around the compressor edge is all that really prevents this. The stagnation pressure is around 1.68 bar, compressor exit pressure is 1.10 bar, and stator exit pressure is 1.30 bar.
 
 I've also noticed that most rc jets mix lubricant into the fuel and then use the same mixture both for the bearings and for combustion - is there any benefit to this besides simplifying plumbing? I'm planning on running a separate pure lubricant line directly to the bearings.
 
@@ -286,7 +286,7 @@ I've also noticed that most rc jets mix lubricant into the fuel and then use the
 
 ## Combustion chamber
 
-The combustion chamber will be made using 0.5mm thick 316 steel sheet. I'm mostly concerned about the air hole pattern and the evap tube design.
+The combustion chamber will be made using 0.5mm thick 316 steel sheet. It is a standard evap tube design - fuel will be injected into the base of the tubes through 1mm copper tubing, hit the wall of the evap tube, vaporize, and flow into the combustion chamber. I'm mostly concerned about the air hole pattern and the evap tube design.
 
 The idea with the air hole pattern was to deliver air directly to each of the 8 evap tube fuel injectors, and to dilute the air with progressively larger diameter holes to ensure that the combustor walls are not exposed to a very high temperature. There is also a ring of 3mm dilution holes around the bottom, with the intention being to protect the stagnation points on the evap tube holders and stators. The hole pattern is mostly done by eye based on existing designs which is why I'm concerned.
 
